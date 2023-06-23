@@ -1,6 +1,7 @@
 package rs.raf.nutritiontracker.application
 
 import android.app.Application
+import rs.raf.nutritiontracker.module.mealModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidFileProperties
 import org.koin.android.ext.koin.androidLogger
@@ -28,7 +29,8 @@ class Application : Application() {
 
     private fun initKoin() {
         val modules = listOf(
-            coreModule
+            coreModule,
+            mealModule
         )
         startKoin {
             androidLogger(Level.ERROR)

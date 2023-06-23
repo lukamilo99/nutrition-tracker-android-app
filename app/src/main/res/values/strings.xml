@@ -4,5 +4,5 @@
     <string name="password_hint">Password</string>
     <string name="email_hint">Email</string>
     <string name="login">Login</string>
-    <string name="welcome_to_home">Welcome Home</string>
+    <string name="welcome_to_home">Home</string>
 </resources>

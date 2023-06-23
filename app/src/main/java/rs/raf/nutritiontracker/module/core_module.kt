@@ -35,7 +35,7 @@ fun createRetrofit(moshi: Moshi,
                    httpClient: OkHttpClient
 ): Retrofit {
     return Retrofit.Builder()
-        .baseUrl("https://www.themealdb.com/")
+        .baseUrl("https://www.themealdb.com/api/json/v1/1/")
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(MoshiConverterFactory.create(moshi).asLenient())
         .client(httpClient)
@@ -53,4 +53,8 @@ fun createOkHttpClient(): OkHttpClient {
         httpClient.addInterceptor(logging)
     }
     return httpClient.build()
+}
+
+inline fun <reified T> create(retrofit: Retrofit): T  {
+    return retrofit.create(T::class.java)
 }

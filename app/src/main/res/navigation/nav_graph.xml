@@ -10,10 +10,6 @@
         android:name="rs.raf.nutritiontracker.presentation.view.fragment.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_login" >
-
-        <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
     </fragment>
 
     <fragment
@@ -21,4 +17,10 @@
         android:name="rs.raf.nutritiontracker.presentation.view.fragment.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="rs.raf.nutritiontracker.presentation.view.fragment.SearchFragment"
+        android:label="SearchFragment" >
+    </fragment>
 </navigation>
