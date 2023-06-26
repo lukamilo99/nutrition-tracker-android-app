@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import rs.raf.nutritiontracker.R
 import rs.raf.nutritiontracker.databinding.FragmentHomeBinding
 import rs.raf.nutritiontracker.presentation.contract.MainContract
@@ -27,6 +26,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        sharedViewModel.getCategories()
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -36,7 +36,6 @@ class HomeFragment : Fragment() {
         initObservers()
         initRecycleView()
         initButton()
-        sharedViewModel.getCategories()
     }
 
     private fun initButton() {
@@ -86,8 +85,8 @@ class HomeFragment : Fragment() {
             .setTitle("Select Search Option")
             .setItems(arrayOf("By Name", "By Ingredient")) { _, which ->
                 when (which) {
-                    0 -> sharedViewModel.getMealByName(binding.searchEditText.text.toString())
-                    1 -> sharedViewModel.getMealByMainIngredient(binding.searchEditText.text.toString())
+                    0 -> sharedViewModel.getMealsByName(binding.searchEditText.text.toString())
+                    1 -> sharedViewModel.getMealsByMainIngredient(binding.searchEditText.text.toString())
                 }
             }
             .show()

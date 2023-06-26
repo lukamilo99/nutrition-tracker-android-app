@@ -31,13 +31,11 @@ class LoginFragment : Fragment() {
         binding.loginButton.setOnClickListener {
             val enteredUsername = binding.usernameEditText.text.toString()
             val enteredPassword = binding.passwordEditText.text.toString()
-            val enteredEmail = binding.emailEditText.text.toString()
 
-            if (enteredUsername == "test" && enteredPassword == "test" && enteredEmail == "test") {
+            if (enteredUsername == "test" && enteredPassword == "test") {
                 with(sharedPreferences.edit()) {
                     putString("username", enteredUsername)
                     putString("password", enteredPassword)
-                    putString("email", enteredEmail)
                     apply()
                 }
                 findNavController().navigate(R.id.homeFragment)

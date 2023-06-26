@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import rs.raf.nutritiontracker.R
 import rs.raf.nutritiontracker.databinding.FragmentSearchBinding
 import rs.raf.nutritiontracker.presentation.contract.MainContract
 import rs.raf.nutritiontracker.presentation.view.recycler.adapter.MealAdapter
@@ -35,14 +36,20 @@ class SearchFragment : Fragment() {
 
     private fun initRecycleView() {
         binding.rvSearchResults.layoutManager = LinearLayoutManager(context)
-        binding.rvSearchResults.adapter = MealAdapter(listOf())
+        binding.rvSearchResults.adapter = MealAdapter(listOf()) { mealId ->
+            sharedViewModel.getMealDetailsById(mealId)
+            findNavController().navigate(R.id.mealDetailsFragment)
+        }
     }
 
     private fun initObservers() {
         sharedViewModel.meals.observe(viewLifecycleOwner) {
             when (it) {
                 is MealState.Success -> {
-                    val adapter = MealAdapter(it.meals)
+                    val adapter = MealAdapter(it.meals) { mealId ->
+                        sharedViewModel.getMealDetailsById(mealId)
+                        findNavController().navigate(R.id.mealDetailsFragment)
+                    }
                     binding.rvSearchResults.adapter = adapter
                 }
 

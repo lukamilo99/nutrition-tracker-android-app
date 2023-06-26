@@ -5,4 +5,12 @@
     <string name="email_hint">Email</string>
     <string name="login">Login</string>
     <string name="welcome_to_home">Home</string>
+    <string name="api_db_switch_text">Your menu</string>
+    <string name="tab_layout_description">Tab layout for filtering meals by category, area, and ingredients</string>
+    <string name="switchApiDb">From you menu</string>
+
+    <string-array name="sort_options">
+        <item>Sort by name ascending</item>
+        <item>Sort by name descending</item>
+    </string-array>
 </resources>

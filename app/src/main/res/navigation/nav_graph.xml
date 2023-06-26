@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -21,6 +21,21 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="rs.raf.nutritiontracker.presentation.view.fragment.SearchFragment"
-        android:label="SearchFragment" >
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search">
+    </fragment>
+
+    <fragment
+        android:id="@+id/advancedSearchFragment"
+        android:name="rs.raf.nutritiontracker.presentation.view.fragment.AdvancedSearchFragment"
+        android:label="AdvancedSearchFragment"
+        tools:layout="@layout/fragment_advanced_search">
+    </fragment>
+
+    <fragment
+        android:id="@+id/mealDetailsFragment"
+        android:name="rs.raf.nutritiontracker.presentation.view.fragment.MealDetailsFragment"
+        android:label="MealDetailsFragment"
+        tools:layout="@layout/fragment_meal_details">
     </fragment>
 </navigation>

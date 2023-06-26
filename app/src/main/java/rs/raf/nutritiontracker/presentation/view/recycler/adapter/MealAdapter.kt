@@ -8,10 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import rs.raf.nutritiontracker.R
-import rs.raf.nutritiontracker.data.model.api.MealApiResponse
+import rs.raf.nutritiontracker.data.model.view.MealView
 
 class MealAdapter(
-    private val meals: List<MealApiResponse>
+    private val meals: List<MealView>,
+    private val onItemClicked: (String) -> Unit
 ) : RecyclerView.Adapter<MealAdapter.MealViewHolder>() {
 
     class MealViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -25,9 +26,12 @@ class MealAdapter(
     }
 
     override fun onBindViewHolder(holder: MealViewHolder, position: Int) {
-        holder.tvMealName.text = meals[position].strMeal
+        holder.itemView.setOnClickListener {
+            onItemClicked(meals[position].id)
+        }
+        holder.tvMealName.text = meals[position].name
         Glide.with(holder.itemView.context)
-            .load(meals[position].strMealThumb)
+            .load(meals[position].mealThumb)
             .into(holder.ivMealImage)
     }
 
