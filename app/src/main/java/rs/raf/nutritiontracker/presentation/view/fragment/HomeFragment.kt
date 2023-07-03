@@ -26,7 +26,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        sharedViewModel.getCategories()
+        sharedViewModel.fetchCategories()
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,22 +41,27 @@ class HomeFragment : Fragment() {
     private fun initButton() {
         binding.btnSearch.setOnClickListener {
             showSearchOptionsDialog()
-            binding.btnSearch.setOnClickListener {
-                findNavController().navigate(R.id.searchFragment)
-            }
         }
     }
 
     private fun initRecycleView() {
         binding.rvCategories.layoutManager = LinearLayoutManager(context)
-        binding.rvCategories.adapter = CategoryAdapter(listOf())
+        binding.rvCategories.adapter = CategoryAdapter(listOf()) { category ->
+            sharedViewModel.fetchMealsByCategory(category.strCategory)
+            sharedViewModel.setSelectedSearchCriteria("Category: ${category.strCategory}")
+            findNavController().navigate(R.id.searchFragment)
+        }
     }
 
     private fun initObservers() {
         sharedViewModel.categories.observe(viewLifecycleOwner) {
             when (it) {
                 is CategoryState.Success -> {
-                    val adapter = CategoryAdapter(it.categories)
+                    val adapter = CategoryAdapter(it.categories) { category ->
+                        sharedViewModel.fetchMealsByCategory(category.strCategory)
+                        sharedViewModel.setSelectedSearchCriteria("Category: ${category.strCategory}")
+                        findNavController().navigate(R.id.searchFragment)
+                    }
                     binding.rvCategories.adapter = adapter
                     binding.rvCategories.layoutManager = LinearLayoutManager(
                         requireContext(),
@@ -66,13 +71,11 @@ class HomeFragment : Fragment() {
                 }
 
                 is CategoryState.Error -> {
-                    // handle error, access the error message with it.message
-                    // you can show an error message to the user
+
                 }
 
                 is CategoryState.Loading -> {
-                    // handle loading state
-                    // you can show a loading spinner
+
                 }
 
                 else -> {}
@@ -84,9 +87,19 @@ class HomeFragment : Fragment() {
         AlertDialog.Builder(requireContext())
             .setTitle("Select Search Option")
             .setItems(arrayOf("By Name", "By Ingredient")) { _, which ->
+                val selectedCriteria = binding.searchEditText.text.toString()
                 when (which) {
-                    0 -> sharedViewModel.getMealsByName(binding.searchEditText.text.toString())
-                    1 -> sharedViewModel.getMealsByMainIngredient(binding.searchEditText.text.toString())
+
+                    0 -> {
+                        sharedViewModel.fetchMealsByName(selectedCriteria)
+                        sharedViewModel.setSelectedSearchCriteria("Name: $selectedCriteria")
+                        findNavController().navigate(R.id.searchFragment)
+                    }
+                    1 -> {
+                        sharedViewModel.fetchMealsByMainIngredient(binding.searchEditText.text.toString())
+                        sharedViewModel.setSelectedSearchCriteria("Ingredient: $selectedCriteria")
+                        findNavController().navigate(R.id.searchFragment)
+                    }
                 }
             }
             .show()

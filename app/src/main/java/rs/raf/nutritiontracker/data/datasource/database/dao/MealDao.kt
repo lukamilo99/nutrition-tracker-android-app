@@ -1,36 +1,46 @@
 package rs.raf.nutritiontracker.data.datasource.database.dao
 
-import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Transaction
-import rs.raf.nutritiontracker.data.model.entity.IngredientEntity
+import io.reactivex.Observable
+import androidx.room.*
 import rs.raf.nutritiontracker.data.model.entity.MealEntity
-import rs.raf.nutritiontracker.data.model.entity.MealIngredientCrossRef
 import rs.raf.nutritiontracker.data.model.entity.MealWithIngredients
 
 @Dao
 interface MealDao {
 
     @Transaction
-    @Query("SELECT * FROM meal WHERE id = :mealId")
-    fun getMealWithIngredients(mealId: String): LiveData<MealWithIngredients>
+    @Query("SELECT * FROM meal WHERE mealId = :mealId")
+    fun getMealDetailsById(mealId: Int): Observable<MealWithIngredients>
 
     @Transaction
+    @Query("SELECT * FROM meal")
+    fun getAllMeals(): Observable<List<MealWithIngredients>>
+
+    @Transaction
+    @Query("SELECT * FROM meal WHERE CAST((creationDate / 1000) AS INTEGER) BETWEEN strftime('%s','now','-7 days') AND strftime('%s','now')  ORDER BY mealId DESC;")
+    fun getMealsFromLastWeek(): Observable<List<MealWithIngredients>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMeal(meal: MealEntity): Int
+    fun insertMeal(meal: MealEntity): Long
 
     @Transaction
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertIngredients(ingredients: List<IngredientEntity>)
-
+    @Query("SELECT * FROM meal " +
+            "INNER JOIN meal_ingredient " +
+            "ON meal.mealId = meal_ingredient.mealId " +
+            "INNER JOIN ingredient " +
+            "ON meal_ingredient.ingredientId = ingredient.ingredientId " +
+            "WHERE ingredient.name = :ingredient")
+    fun getMealsByIngredient(ingredient: String): Observable<List<MealEntity>>
     @Transaction
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMealIngredientsJoin(mealIngredientJoin: MealIngredientCrossRef)
-
+    @Query("SELECT * FROM meal WHERE category = :category")
+    fun getMealsByCategory(category: String): Observable<List<MealEntity>>
     @Transaction
-    @Query("DELETE FROM meal WHERE id = :mealId")
-    fun deleteMeal(mealId: String)
+    @Query("SELECT * FROM meal WHERE area = :region")
+    fun getMealsByRegion(region: String): Observable<List<MealEntity>>
+
+    @Update
+    fun updateMeal(meal: MealEntity)
+
+    @Delete
+    fun deleteMeal(meal: MealEntity)
 }

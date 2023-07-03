@@ -36,35 +36,48 @@ class SearchFragment : Fragment() {
 
     private fun initRecycleView() {
         binding.rvSearchResults.layoutManager = LinearLayoutManager(context)
-        binding.rvSearchResults.adapter = MealAdapter(listOf()) { mealId ->
-            sharedViewModel.getMealDetailsById(mealId)
-            findNavController().navigate(R.id.mealDetailsFragment)
-        }
+        binding.rvSearchResults.adapter = MealAdapter(
+            meals = listOf(),
+            onFetch = { mealId ->
+                sharedViewModel.fetchMealDetailsById(mealId)
+                findNavController().navigate(R.id.mealDetailsFragment)
+            },
+            onGet = { mealId ->
+                sharedViewModel.getMealDetailsById(mealId.toInt())
+                findNavController().navigate(R.id.mealDetailsFragment)
+            }
+        )
     }
 
     private fun initObservers() {
         sharedViewModel.meals.observe(viewLifecycleOwner) {
             when (it) {
                 is MealState.Success -> {
-                    val adapter = MealAdapter(it.meals) { mealId ->
-                        sharedViewModel.getMealDetailsById(mealId)
-                        findNavController().navigate(R.id.mealDetailsFragment)
-                    }
+                    val adapter = MealAdapter(
+                        meals = it.meals,
+                        onFetch = { mealId ->
+                            sharedViewModel.fetchMealDetailsById(mealId)
+                            findNavController().navigate(R.id.mealDetailsFragment)
+                        },
+                        onGet = { mealId ->
+                            sharedViewModel.getMealDetailsById(mealId.toInt())
+                            findNavController().navigate(R.id.mealDetailsFragment)
+                        }
+                    )
                     binding.rvSearchResults.adapter = adapter
                 }
-
                 is MealState.Error -> {
-                    // handle error, access the error message with it.message
-                    // you can show an error message to the user
-                }
 
+                }
                 is MealState.Loading -> {
-                    // handle loading state
-                    // you can show a loading spinner
-                }
 
+                }
                 else -> {}
             }
+        }
+
+        sharedViewModel.selectedSearchCriteria.observe(viewLifecycleOwner) { criteria ->
+            binding.tvSelectedCriteria.text = criteria
         }
     }
 

@@ -12,7 +12,8 @@ import rs.raf.nutritiontracker.R
 import rs.raf.nutritiontracker.data.model.api.CategoryApiResponse
 
 class CategoryAdapter(
-    private val categories: List<CategoryApiResponse>
+    private val categories: List<CategoryApiResponse>,
+    private val onCategoryClick: (CategoryApiResponse) -> Unit
     ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -33,6 +34,9 @@ class CategoryAdapter(
         setCategoryName(holder, category)
         setMoreClickListener(holder, category)
         loadCategoryImage(holder, category)
+        holder.itemView.setOnClickListener {
+            onCategoryClick(category)
+        }
     }
 
     private fun setCategoryName(holder: CategoryViewHolder, category: CategoryApiResponse) {

@@ -7,9 +7,9 @@ import androidx.room.Relation
 data class MealWithIngredients(
     @Embedded val meal: MealEntity,
     @Relation(
-        parentColumn = "id",
-        entityColumn = "id",
-        associateBy = Junction(MealIngredientCrossRef::class)
+        parentColumn = "mealId",
+        entityColumn = "ingredientId",
+        associateBy = Junction(MealIngredient::class)
     )
-    val ingredients: List<IngredientWithQuantity>
+    val ingredients: List<IngredientEntity>
 )

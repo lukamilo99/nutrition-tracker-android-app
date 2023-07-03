@@ -4,6 +4,8 @@ import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query
 import rs.raf.nutritiontracker.data.model.api.CategoryListApiResponse
+import rs.raf.nutritiontracker.data.model.api.CategoryNameApiResponse
+import rs.raf.nutritiontracker.data.model.api.CategoryNameListApiResponse
 import rs.raf.nutritiontracker.data.model.api.MealDetailsListApiResponse
 import rs.raf.nutritiontracker.data.model.api.MealListApiResponse
 import rs.raf.nutritiontracker.data.model.api.RegionNameListApiResponse
@@ -24,4 +26,6 @@ interface ApiMealService {
     fun getMealsByRegion(@Query("a") region: String): Observable<MealListApiResponse>
     @GET("list.php")
     fun getRegionNames(@Query("a") list: String): Observable<RegionNameListApiResponse>
+    @GET("list.php")
+    fun getCategoryNames(@Query("c") list: String): Observable<CategoryNameListApiResponse>
 }

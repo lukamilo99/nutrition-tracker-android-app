@@ -25,44 +25,106 @@
             android:layout_margin="10dp"
             android:layout_below="@id/tvMealName"/>
 
+        <TextView
+            android:id="@+id/tvType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/labelType" />
+
+        <TextView
+            android:id="@+id/labelPreparationDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Preparation Date"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_below="@id/tvType"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvPreparationDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/labelPreparationDate" />
+
         <Button
             android:id="@+id/btnSaveMeal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save Meal"
-            android:layout_below="@id/ivMealImage"
+            android:layout_below="@id/tvPreparationDate"
             android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/labelType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_below="@id/btnModifyMeal"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnModifyMeal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Modify Meal"
+            android:layout_below="@id/ivMealImage"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/labelCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Category"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_below="@id/btnSaveMeal"/>
 
         <TextView
             android:id="@+id/tvCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btnSaveMeal"/>
+            android:layout_below="@id/labelCategory"/>
+
+        <TextView
+            android:id="@+id/labelArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Area"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_below="@id/tvCategory"/>
 
         <TextView
             android:id="@+id/tvArea"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvCategory"/>
+            android:layout_below="@id/labelArea"/>
+
+        <TextView
+            android:id="@+id/labelInstructions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Instructions"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_below="@id/tvArea"/>
 
         <TextView
             android:id="@+id/tvInstructions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvArea"/>
-
-        <TextView
-            android:id="@+id/tvTags"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvInstructions"/>
+            android:layout_below="@id/labelInstructions"/>
 
         <Button
             android:id="@+id/btnYoutubeLink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="YouTube Link"
-            android:layout_below="@id/tvTags"
+            android:layout_below="@id/tvInstructions"
             android:layout_centerHorizontal="true"/>
 
         <LinearLayout

@@ -38,4 +38,32 @@
         android:label="MealDetailsFragment"
         tools:layout="@layout/fragment_meal_details">
     </fragment>
+
+    <fragment
+        android:id="@+id/mealMenuFragment"
+        android:name="rs.raf.nutritiontracker.presentation.view.fragment.MealMenuFragment"
+        android:label="MealMenuFragment"
+        tools:layout="@layout/fragment_meal_menu">
+    </fragment>
+
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="rs.raf.nutritiontracker.presentation.view.fragment.StatisticsFragment"
+        android:label="StatisticsFragment"
+        tools:layout="@layout/fragment_statistics">
+    </fragment>
+
+    <fragment
+        android:id="@+id/modifyMealFragment"
+        android:name="rs.raf.nutritiontracker.presentation.view.fragment.MealModifyFragment"
+        android:label="ModifyMealFragment"
+        tools:layout="@layout/fragment_meal_modify">
+    </fragment>
+
+    <fragment
+        android:id="@+id/plannerFragment"
+        android:name="rs.raf.nutritiontracker.presentation.view.fragment.PlannerFragment"
+        android:label="PlannerFragment"
+        tools:layout="@layout/fragment_planner">
+    </fragment>
 </navigation>

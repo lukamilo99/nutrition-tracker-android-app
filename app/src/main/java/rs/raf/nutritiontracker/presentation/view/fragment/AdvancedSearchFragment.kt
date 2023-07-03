@@ -36,12 +36,15 @@ class AdvancedSearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.switchApiDb.text = "API"
+        sharedViewModel.fetchRegionNames()
+        sharedViewModel.fetchCategoryNames()
         initAutoComplete()
         initRecycleView()
         initObservers()
         initButton()
         initSpinner()
-        sharedViewModel.getRegionNames()
+        initSwitch()
     }
 
     private fun initAutoComplete() {
@@ -58,31 +61,41 @@ class AdvancedSearchFragment : Fragment() {
 
     private fun initRecycleView() {
         binding.rvAdvancedSearchResults.layoutManager = LinearLayoutManager(context)
-        binding.rvAdvancedSearchResults.adapter = MealAdapter(listOf()) { mealId ->
-            sharedViewModel.getMealDetailsById(mealId)
-            findNavController().navigate(R.id.mealDetailsFragment)
-        }
+        binding.rvAdvancedSearchResults.adapter = MealAdapter(
+            meals = listOf(),
+            onFetch = { mealId ->
+                sharedViewModel.fetchMealDetailsById(mealId)
+                findNavController().navigate(R.id.mealDetailsFragment)
+            },
+            onGet = { mealId ->
+                sharedViewModel.getMealDetailsById(mealId.toInt())
+                findNavController().navigate(R.id.mealDetailsFragment)
+            }
+        )
     }
 
     private fun initObservers() {
         sharedViewModel.meals.observe(viewLifecycleOwner) {
             when (it) {
                 is MealState.Success -> {
-                    val adapter = MealAdapter(it.meals) { mealId ->
-                        sharedViewModel.getMealDetailsById(mealId)
-                        findNavController().navigate(R.id.mealDetailsFragment)
-                    }
+                    val adapter = MealAdapter(
+                        meals = it.meals,
+                        onFetch = { mealId ->
+                            sharedViewModel.fetchMealDetailsById(mealId)
+                            findNavController().navigate(R.id.mealDetailsFragment)
+                        },
+                        onGet = { mealId ->
+                            sharedViewModel.getMealDetailsById(mealId.toInt())
+                            sharedViewModel.mealDetails.value
+                            findNavController().navigate(R.id.mealDetailsFragment)
+                        }
+                    )
                     binding.rvAdvancedSearchResults.adapter = adapter
                 }
-
                 is MealState.Error -> {
-
                 }
-
                 is MealState.Loading -> {
-
                 }
-
                 else -> {}
             }
         }
@@ -134,26 +147,23 @@ class AdvancedSearchFragment : Fragment() {
             when(selectedRadioButtonId) {
                 R.id.radio_categories -> {
                     if(switchChecked) {
-                        // switch is on, send some request based on editTextValue
-                        // sharedViewModel.sendApiRequest(editTextValue)
-                    } else {
                         sharedViewModel.getMealsByCategory(editTextValue)
+                    } else {
+                        sharedViewModel.fetchMealsByCategory(editTextValue)
                     }
                 }
                 R.id.radio_regions -> {
                     if(switchChecked) {
-                        // switch is on, send some request based on editTextValue
-                        // sharedViewModel.sendApiRequest(editTextValue)
-                    } else {
                         sharedViewModel.getMealsByRegion(editTextValue)
+                    } else {
+                        sharedViewModel.fetchMealsByRegion(editTextValue)
                     }
                 }
                 R.id.radio_ingredients -> {
                     if(switchChecked) {
-                        // switch is on, send some request based on editTextValue
-                        // sharedViewModel.sendApiRequest(editTextValue)
-                    } else {
                         sharedViewModel.getMealsByMainIngredient(editTextValue)
+                    } else {
+                        sharedViewModel.fetchMealsByMainIngredient(editTextValue)
                     }
                 }
             }
@@ -162,7 +172,7 @@ class AdvancedSearchFragment : Fragment() {
 
     private fun initSpinner() {
         binding.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 when (parent.getItemAtPosition(position).toString()) {
                     "Sort by name ascending" -> sharedViewModel.sortMealsByNameAscending()
                     "Sort by name descending" -> sharedViewModel.sortMealsByNameDescending()
@@ -174,6 +184,18 @@ class AdvancedSearchFragment : Fragment() {
             }
         }
     }
+
+    private fun initSwitch() {
+        binding.switchApiDb.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.switchApiDb.text = "Menu"
+            } else {
+                binding.switchApiDb.text = "API"
+            }
+        }
+    }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

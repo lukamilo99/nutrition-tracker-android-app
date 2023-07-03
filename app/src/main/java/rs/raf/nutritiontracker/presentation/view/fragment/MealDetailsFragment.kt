@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import rs.raf.nutritiontracker.R
 import rs.raf.nutritiontracker.data.model.view.MealDetailsView
 import rs.raf.nutritiontracker.databinding.FragmentMealDetailsBinding
 import rs.raf.nutritiontracker.presentation.contract.MainContract
@@ -39,13 +41,37 @@ class MealDetailsFragment : Fragment() {
             when (it) {
                 is MealDetailsState.Success -> {
                     binding.apply {
-                        tvMealName.text = it.meal.name ?: "Not available"
-                        tvCategory.text = it.meal.category ?: "Not available"
-                        tvArea.text = it.meal.area ?: "Not available"
-                        tvInstructions.text = it.meal.instructions ?: "Not available"
+                        tvMealName.text = it.meal.name
+                        tvCategory.text = it.meal.category
+                        tvArea.text = it.meal.area
+                        tvInstructions.text = it.meal.instructions
                         Glide.with(requireContext())
                             .load(it.meal.mealThumb)
                             .into(ivMealImage)
+
+                        if(it.meal.isSaved) {
+                            btnSaveMeal.visibility = View.GONE
+                            tvPreparationDate.visibility = View.VISIBLE
+                            tvPreparationDate.text = it.meal.preparationDate.toString()
+                            tvType.visibility = View.VISIBLE
+                            tvType.text = it.meal.type
+                            labelType.visibility = View.VISIBLE
+                            labelPreparationDate.visibility = View.VISIBLE
+                            btnModifyMeal.visibility = View.VISIBLE
+                            btnModifyMeal.setOnClickListener {
+                                findNavController().navigate(R.id.modifyMealFragment)
+                            }
+                        } else {
+                            btnModifyMeal.visibility = View.GONE
+                            btnSaveMeal.visibility = View.VISIBLE
+                            tvPreparationDate.visibility = View.GONE
+                            tvType.visibility = View.GONE
+                            labelType.visibility = View.GONE
+                            labelPreparationDate.visibility = View.GONE
+                            btnSaveMeal.setOnClickListener {
+                                findNavController().navigate(R.id.mealMenuFragment)
+                            }
+                        }
 
                         if(it.meal.youtubeUrl != null) {
                             val url = it.meal.youtubeUrl
@@ -70,22 +96,16 @@ class MealDetailsFragment : Fragment() {
                         }
                         tvIngredients.text = ingredients.toString()
                         tvMeasures.text = measures.toString()
-
-                        btnSaveMeal.setOnClickListener {
-
-                        }
                     }
 
                 }
 
                 is MealDetailsState.Error -> {
-                    // handle error, access the error message with it.message
-                    // you can show an error message to the user
+
                 }
 
                 is MealDetailsState.Loading -> {
-                    // handle loading state
-                    // you can show a loading spinner
+
                 }
 
                 else -> {}
@@ -94,7 +114,7 @@ class MealDetailsFragment : Fragment() {
     }
 
     private fun getIngredient(meal: MealDetailsView, index: Int): String? {
-        return meal.ingredientsWithMeasurements.getOrNull(index)?.name
+        return meal.ingredientsWithMeasurements.getOrNull(index)?.ingredientName
     }
 
     private fun getMeasure(meal: MealDetailsView, index: Int): String? {

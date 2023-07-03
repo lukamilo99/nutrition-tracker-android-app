@@ -19,7 +19,7 @@ val mealModule = module {
         , customMapper = get()
         , mealDao = get()
         , ingredientDao = get()
-        , mealIngredientCrossRefDao = get())}
+        , mealIngredientDao = get())}
     single<ApiMealService> { create(retrofit = get())}
     single{CustomMapper()}
 }

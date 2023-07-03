@@ -11,12 +11,12 @@
         android:title="Advanced Search" />
 
     <item
-        android:id="@+id/navigation_meal_planner"
+        android:id="@+id/plannerFragment"
         android:icon="@drawable/meal"
         android:title="Meal Planner" />
 
     <item
-        android:id="@+id/navigation_statistics"
+        android:id="@+id/statisticsFragment"
         android:icon="@drawable/stats"
         android:title="Statistics" />
 

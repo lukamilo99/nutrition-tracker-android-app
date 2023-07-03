@@ -1,6 +1,7 @@
 package rs.raf.nutritiontracker.data.model.view
 
 data class IngredientWithMeasurementView(
-    val name: String,
+    val id: Long,
+    val ingredientName: String,
     val quantity: String
 )

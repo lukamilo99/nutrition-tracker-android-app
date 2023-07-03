@@ -1,17 +1,21 @@
 package rs.raf.nutritiontracker.data.datasource.database.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.Update
 import rs.raf.nutritiontracker.data.model.entity.IngredientEntity
 
 @Dao
 interface IngredientDao {
 
-    @Query("SELECT * FROM ingredient WHERE name = :ingredientName")
-    fun getIngredientByName(ingredientName: String): IngredientEntity?
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertIngredient(ingredient: IngredientEntity): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertIngredient(ingredient: IngredientEntity): Int
+    @Update
+    fun updateIngredient(ingredient: IngredientEntity)
+
+    @Delete
+    fun deleteIngredient(ingredient: IngredientEntity)
 }

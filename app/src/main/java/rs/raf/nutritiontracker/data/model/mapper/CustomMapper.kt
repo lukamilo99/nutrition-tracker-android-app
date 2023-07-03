@@ -18,7 +18,7 @@ class CustomMapper {
             val measure = getMeasure(response, i)
 
             if (!ingredient.isNullOrBlank() && !measure.isNullOrBlank()) {
-                ingredientsWithMeasurements.add(IngredientWithMeasurementView(ingredient, measure))
+                ingredientsWithMeasurements.add(IngredientWithMeasurementView(0, ingredient, measure))
             }
         }
 
@@ -32,17 +32,19 @@ class CustomMapper {
             preparationDate = Date(),
             type = "",
             youtubeUrl = response.strYoutube,
-            ingredientsWithMeasurements = ingredientsWithMeasurements
+            isSaved = false,
+            ingredientsWithMeasurements = ingredientsWithMeasurements,
+            creationDate = Date()
         )
     }
 
     fun entityToViewMealDetails(mealWithIngredients: MealWithIngredients): MealDetailsView {
         val ingredientsWithMeasurements = mealWithIngredients.ingredients.map {
-            IngredientWithMeasurementView(it.ingredient.name, it.measurement?.quantity ?: "")
+            IngredientWithMeasurementView(it.ingredientId, it.name, it.quantity)
         }
 
         return MealDetailsView(
-            id = mealWithIngredients.meal.id.toString(),
+            id = mealWithIngredients.meal.mealId.toString(),
             name = mealWithIngredients.meal.name,
             category = mealWithIngredients.meal.category,
             area = mealWithIngredients.meal.area,
@@ -51,13 +53,14 @@ class CustomMapper {
             preparationDate = mealWithIngredients.meal.preparationDate,
             type = mealWithIngredients.meal.type,
             youtubeUrl = mealWithIngredients.meal.youtubeUrl,
-            ingredientsWithMeasurements = ingredientsWithMeasurements
+            isSaved = true,
+            ingredientsWithMeasurements = ingredientsWithMeasurements,
+            creationDate = mealWithIngredients.meal.creationDate
         )
     }
 
     fun viewToEntityMealDetails(mealDetailsView: MealDetailsView): MealEntity {
         return MealEntity(
-            id = mealDetailsView.id.toInt(),
             name = mealDetailsView.name,
             category = mealDetailsView.category,
             area = mealDetailsView.area,
@@ -65,7 +68,9 @@ class CustomMapper {
             mealThumb = mealDetailsView.mealThumb,
             preparationDate = mealDetailsView.preparationDate,
             type = mealDetailsView.type,
-            youtubeUrl = mealDetailsView.youtubeUrl
+            youtubeUrl = mealDetailsView.youtubeUrl,
+            creationDate = Date(),
+            mealId = mealDetailsView.id.toLong()
         )
     }
 
@@ -73,15 +78,17 @@ class CustomMapper {
         return MealView(
             id = apiResponse.idMeal,
             name = apiResponse.strMeal,
-            mealThumb = apiResponse.strMealThumb
+            mealThumb = apiResponse.strMealThumb,
+            isSaved = false
         )
     }
 
     fun entityToViewMeal(entity: MealEntity): MealView {
         return MealView(
-            id = entity.id.toString(),
+            id = entity.mealId.toString(),
             name = entity.name,
-            mealThumb = entity.mealThumb
+            mealThumb = entity.mealThumb,
+            isSaved = true
         )
     }
 

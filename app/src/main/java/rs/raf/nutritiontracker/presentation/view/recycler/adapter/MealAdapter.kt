@@ -12,7 +12,8 @@ import rs.raf.nutritiontracker.data.model.view.MealView
 
 class MealAdapter(
     private val meals: List<MealView>,
-    private val onItemClicked: (String) -> Unit
+    private val onFetch: (String) -> Unit,
+    private val onGet: (String) -> Unit
 ) : RecyclerView.Adapter<MealAdapter.MealViewHolder>() {
 
     class MealViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -26,10 +27,15 @@ class MealAdapter(
     }
 
     override fun onBindViewHolder(holder: MealViewHolder, position: Int) {
+        val meal = meals[position]
         holder.itemView.setOnClickListener {
-            onItemClicked(meals[position].id)
+            if (meal.isSaved) {
+                onGet(meal.id)
+            } else {
+                onFetch(meal.id)
+            }
         }
-        holder.tvMealName.text = meals[position].name
+        holder.tvMealName.text = meal.name
         Glide.with(holder.itemView.context)
             .load(meals[position].mealThumb)
             .into(holder.ivMealImage)
